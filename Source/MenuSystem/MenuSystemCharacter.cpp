@@ -13,8 +13,8 @@
 #include "OnlineSessionSettings.h"
 
 /*
-Ниже инициализация делегатов перед телом конструктора класса
-для функций OnCreateSessionComplete() и OnFindSessionsComplete()
+Below is delegate initialization before class constructor body
+for the OnCreateSessionComplete() and OnFindSessionsComplete() functions
 */
 AMenuSystemCharacter::AMenuSystemCharacter():
 CreateSessionCompleteDelegate(FOnCreateSessionCompleteDelegate::CreateUObject(this, &ThisClass::OnCreateSessionComplete)),
@@ -46,7 +46,7 @@ FindSessionsCompleteDelegate(FOnFindSessionsCompleteDelegate::CreateUObject(this
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); 
 	FollowCamera->bUsePawnControlRotation = false; 
 
-	//Для инициализации OnlineSubsystem используется функция Get() - которая возвращает указатель 
+	//To initialize the OnlineSubsystem, the Get() function is used - which returns a pointer
 	IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get();
 	if (OnlineSubsystem)
 	{
@@ -81,15 +81,15 @@ void AMenuSystemCharacter::BeginPlay()
 void AMenuSystemCharacter::CreateGameSession()
 {
 	/*
-		Проверка на валидность указателя
+		Pointer validity check
 	*/
 	if (!OnlineSessionInterface.IsValid())
 	{
 		return;
 	}
 	/*
-		Проверка на то существует ли уже сессия, 
-		и если существующая сессия не nullptr то она уничтожается.
+		Checking if the session already exists,
+		and if the existing session is not nullptr then it is destroyed.
 	*/
 	auto ExistingSession = OnlineSessionInterface->GetNamedSession(NAME_GameSession);
 	if (ExistingSession != nullptr)
@@ -97,27 +97,28 @@ void AMenuSystemCharacter::CreateGameSession()
 		OnlineSessionInterface->DestroySession(NAME_GameSession);
 	}
 	/*
-		Добавление делегата к списку делегатов, перед созданием сессии
+		Adding a delegate to the list of delegates before creating a session
 	*/
 	OnlineSessionInterface->AddOnCreateSessionCompleteDelegate_Handle(CreateSessionCompleteDelegate);
 	/*
-		Для создания нового объекта типа TSharedPtr, используем функцию MakeShareable	
+		
+		To create a new object of type TSharedPtr, use the MakeShareable function	
 		
 	*/
 	TSharedPtr<FOnlineSessionSettings> SessionSettings = MakeShareable(new FOnlineSessionSettings());
 	SessionSettings->bIsLANMatch = false; 
-	SessionSettings->NumPublicConnections = 4; // количество подключений 
-	SessionSettings->bAllowJoinInProgress = true; // можно ли подключатся если сессия уже была запущена 
-	SessionSettings->bAllowJoinViaPresence = true; // ищет в поисках подключений в регионе сервера 
-	SessionSettings->bShouldAdvertise = true; // сессия будет отображаться в списке сессий 
-	SessionSettings->bUsesPresence = true; // разрашает использовать регион игрока для подключения
+	SessionSettings->NumPublicConnections = 4; // number of connections 
+	SessionSettings->bAllowJoinInProgress = true; // is it possible to connect if the session has already been started 
+	SessionSettings->bAllowJoinViaPresence = true;
+	SessionSettings->bShouldAdvertise = true; // session will be displayed in the list of sessions
+	SessionSettings->bUsesPresence = true; // allows using the player's region to connect
 	SessionSettings->bUseLobbiesIfAvailable = true;
 
 	const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController();// получаем имя первого игрока для функции CreateSession 
 	OnlineSessionInterface->CreateSession(*LocalPlayer->GetPreferredUniqueNetId(), NAME_GameSession, *SessionSettings);
 }
 
-void AMenuSystemCharacter::JoinGameSession()//Нахождение игровой сессии 
+void AMenuSystemCharacter::JoinGameSession()//Finding a game session
 {
 	if (!OnlineSessionInterface.IsValid())
 	{
@@ -128,9 +129,9 @@ void AMenuSystemCharacter::JoinGameSession()//Нахождение игровой сессии
 
 	SessionSearch = MakeShareable(new FOnlineSessionSearch());
 	/*
-	так как в DefaultEngine.ini используется 
-	открытый steam dev id "SteamDevAppId=480", 
-	при величине в 10к есть хороший шанс найти подключения 
+		since the DefaultEngine.ini uses
+		open steam dev id "SteamDevAppId=480",
+		with a value of 10k there is a good chance to find connections
 	*/
 	SessionSearch->MaxSearchResults = 10000; 
 	SessionSearch->bIsLanQuery = false;

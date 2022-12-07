@@ -53,22 +53,22 @@ public:
 public:
 
 	/*
-	Ниже указатель для сессии онлайн интерфейса.
-	IOnlineSessionPtr - является умным указателем, 
-	и безопасным для многопоточной среды.
+		Below is the pointer for the online interface session.
+		IOnlineSessionPtr - is a smart pointer,
+		and safe for multi-threaded environment.
 
-	Чтобы не добавлять лишний хедер, 
-	можно использовать Shared указатель как обертку 
+		in order not to add an extra header,
+		you can use a Shared pointer as a wrapper
 	*/
 	IOnlineSessionPtr OnlineSessionInterface;
 
 protected:
 
 	UFUNCTION(BlueprintCallable)
-	void CreateGameSession(); // Функция будет вызываться при нажатии кнопки 1 
+	void CreateGameSession(); // The function will be called when button 1 is pressed
 
 	UFUNCTION(BlueprintCallable)
-	void JoinGameSession();
+	void JoinGameSession(); // The function will be called when button 2 is pressed
 
 	void OnCreateSessionComplete(FName SessionName, bool bWasSuccessful);
 	void OnFindSessionsComplete(bool bWasSuccessful);

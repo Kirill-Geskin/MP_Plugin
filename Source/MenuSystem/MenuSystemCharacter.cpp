@@ -242,7 +242,7 @@ void AMenuSystemCharacter::OnJoinSessionComplete(FName SessionName, EOnJoinSessi
 		return;
 	}
 	FString Address;
-	if (OnlineSessionInterface->GetResolvedConnectString(NAME_GameSession, Address))
+	if (OnlineSessionInterface->GetResolvedConnectString(NAME_GameSession, Address)) // getting ip address 
 	{
 		if (GEngine)
 		{
@@ -253,7 +253,9 @@ void AMenuSystemCharacter::OnJoinSessionComplete(FName SessionName, EOnJoinSessi
 				FString::Printf(TEXT("Connect string: %s"), *Address)
 			);
 		}
-
+		/*
+			in order to travel to address, we call function ClientTravel()
+		*/
 		APlayerController* PlayerController = GetGameInstance()->GetFirstLocalPlayerController();
 		if (PlayerController)
 		{

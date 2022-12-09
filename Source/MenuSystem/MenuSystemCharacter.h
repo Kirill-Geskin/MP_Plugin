@@ -76,8 +76,8 @@ protected:
 
 private:
 
-	FOnCreateSessionCompleteDelegate CreateSessionCompleteDelegate;
-	FOnFindSessionsCompleteDelegate FindSessionsCompleteDelegate;
+	FOnCreateSessionCompleteDelegate CreateSessionCompleteDelegate; // delegat for function CreateGameSession()
+	FOnFindSessionsCompleteDelegate FindSessionsCompleteDelegate; // delegat for function JoinGameSession()
 	TSharedPtr<FOnlineSessionSearch>SessionSearch;
 	FOnJoinSessionCompleteDelegate JoinSessionCompleteDelegate; // delegat for the joining to the session in function OnFindSessionsComplete
 };
